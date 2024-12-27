@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Slider with Smooth Animation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffe4e1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            position: relative;
+        }
+
+        .image-box {
+            width: 300px;
+            height: 400px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .image-box img.active {
+            opacity: 1;
+        }
+
+        .caption {
+            margin: 15px 0;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .next-button {
+            display: inline-block;
+            background-color: #ff6b6b;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        .next-button:hover {
+            background-color: #ff4c4c;
+        }
+
+        .speaker-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+  
+    <div class="container animate__animated animate__rubberBand">
+        <img id="speaker-icon" class="speaker-button" src="mute.png" alt="Speaker Icon" onclick="toggleSound()">
+        <div class="image-box">
+            <img src="3FC0609C-0A15-48B4-A5F5-15439D2B5A8E.jpg" class="active" alt="Slide 1">
+            <img src="IMG_3684.jpg" alt="Slide 2">
+            <img src="IMG_3686.jpg" alt="Slide 3">
+            <img src="IMG_3687.jpg" alt="Slide 4">
+            <img src="IMG_3688.jpg" alt="Slide 5">
+            <img src="IMG_3689.jpg" alt="Slide 6">
+            <img src="IMG_3692.jpg" alt="Slide 7">
+        </div>
+        <div class="caption">Welcome to our Minecraft team</div>
+        <button class="next-button" onclick="nextSlide()">Next</button>
+    </div>
+
+    <audio id="background-music" src="From the screen , to the ring , to the pen  , to the king , wheres my crown  thats my bling.mp3" loop></audio>
+
+    <script>
+        const slides = document.querySelectorAll('.image-box img');
+        const captions = [
+            "Welcome to our Minecraft team",
+            "1.Tyla or เสือ",
+            "2.MJ or คุณตา",
+            "3.Kampu or แสงสว่างที่มืดมิด..",
+            "4.Copter sigma boy",
+            "5.Sabu or Ahwa..",
+            "6.Khun but เพราะเธอคือทุกอย่างของเค้า 🌹 จุ้บๆ",
+        ];
+        const captionElement = document.querySelector('.caption');
+        let currentIndex = 0;
+
+        function nextSlide() {
+            slides[currentIndex].classList.remove('active');
+            slides[currentIndex].classList.add('animate__animated', 'animate__bounceOutLeft');
+
+            slides[currentIndex].addEventListener('animationend', function handleAnimationEnd() {
+                slides[currentIndex].classList.remove('animate__animated', 'animate__bounceOutLeft');
+                currentIndex = (currentIndex + 1) % slides.length;
+                slides[currentIndex].classList.add('active', 'animate__animated', 'animate__bounceInRight');
+                captionElement.textContent = captions[currentIndex];
+
+                slides[currentIndex].addEventListener('animationend', () => {
+                    slides[currentIndex].classList.remove('animate__animated', 'animate__bounceInRight');
+                }, { once: true });
+            }, { once: true });
+        }
+
+        const music = document.getElementById('background-music');
+        const speakerIcon = document.getElementById('speaker-icon');
+        let isMuted = true;
+
+        function toggleSound() {
+            if (isMuted) {
+                music.play();
+                speakerIcon.src = "speaker-filled-audio-tool.png";
+            } else {
+                music.pause();
+                speakerIcon.src = "mute.png";
+            }
+            isMuted = !isMuted;
+        }
+    </script>
+</body>
+</html>
